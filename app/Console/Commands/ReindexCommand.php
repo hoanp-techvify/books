@@ -61,7 +61,7 @@ class ReindexCommand extends Command
         } catch (\Exception $e) {
         }
 
-        Book::whereHas('authors')->chunk(100, function ($books) {
+        Book::chunk(1000, function ($books) {
             $params = [];
             $books->each(function (Book $book) use (&$params) {
                 $params['body'][] = [
@@ -75,7 +75,7 @@ class ReindexCommand extends Command
                     'title' => $book->title,
                     'summary' => $book->summary,
                     'publisher' => $book->publisher?->name,
-                    'authors' => $book->authors()?->pluck('name')->toArray()
+                    'authors' => $book->authors?->pluck('name')->toArray()
                 ];
             });
 

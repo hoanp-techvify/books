@@ -39,23 +39,24 @@ class DatabaseSeeder extends Seeder
             });
             Book::insert($books->toArray());
             
-            echo ".";
-        }
-        Book::doesntHave('authors')->chunk(1000, function ($books) use($authors) {
-            $data= [];
-            $books->each(function ($book) use(&$data, $authors) {
-                array_push($data, [
-                    'author_id' => $authors->random()->id,
-                    'book_id' => $book->id
-                ]);
-                array_push($data, [
-                    'author_id' => $authors->random()->id,
-                    'book_id' => $book->id
-                ]);
+            Book::doesntHave('authors')->chunk(300, function ($books) use($authors) {
+                $data= [];
+                $books->each(function ($book) use(&$data, $authors) {
+                    array_push($data, [
+                        'author_id' => $authors->random()->id,
+                        'book_id' => $book->id
+                    ]);
+                    array_push($data, [
+                        'author_id' => $authors->random()->id,
+                        'book_id' => $book->id
+                    ]);
+                });
+    
+                DB::table("author_book")->insert($data);
             });
-
-            DB::table("author_book")->insert($data);
             echo ".";
-        });
+            
+        }
+        
     }
 }
