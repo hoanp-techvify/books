@@ -24,12 +24,15 @@ class ElasticsearchRepository implements SearchRepository
             return new Collection();
         }
         $items = $this->searchOnElasticsearch($query, $from, $size);
-        $ids = Arr::pluck($items['hits']['hits'], '_id');
-        if (empty($ids)) {
-            return new Collection();
-        }
+        $data = new Collection(Arr::pluck($items['hits']['hits'], '_source'));
 
-        return $this->buildCollection($ids);
+        $data = $data->map(function ($data) {
+
+            return (object)$data;
+
+        });
+
+        return new Collection($data);
     }
 
     private function searchOnElasticsearch(string $query = '', $from, $size): array
