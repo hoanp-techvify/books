@@ -19,16 +19,27 @@
 
     Migrate database:
     
-    docker container exec laravel_workspace php artisan migrate
+    docker container exec laravel_php-fpm php artisan migrate
     
 - STEP 5
 
     Seed data to test. It will take several minutes.
     
-    docker container exec laravel_workspace php artisan db:seed
+    docker container exec laravel_php-fpm php artisan db:seed
     
 - STEP 6
 
     Sync data to elasticsearch
     
-    docker container exec laravel_workspace php artisan search:reindex
+    docker container exec laravel_php-fpm php artisan search:reindex
+
+- STEP 7
+
+    Test API URL: http://localhost/search/book?q={string}
+
+
+## RUN TEST
+
+docker container exec laravel_php-fpm php artisan test
+
+
